@@ -14,3 +14,6 @@ shell:
 
 push:
 	podman push quay.io/bthomass/ai-code-dev:latest
+
+pull:
+	podman push quay.io/bthomass/ai-code-dev:latest
