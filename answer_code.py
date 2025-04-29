@@ -24,8 +24,11 @@ from rich.prompt import Prompt
 @click.option(
     "--max-tokens", default=3000, help="Maximum number of tokens to generate."
 )
+@click.option(
+    "--num-ctx", default=8192, help="Size of the context"
+)
 @click.option("--temperature", default=0.7, help="Temperature to use for generation.")
-def main(files, api_base, model, max_tokens, temperature):
+def main(files, api_base, model, max_tokens, temperature, num_ctx):
     system_prompt = """You are a helpful code assistant.
     Given the following code answer questions about it"""
 
@@ -43,8 +46,8 @@ def main(files, api_base, model, max_tokens, temperature):
     while not done:
         prompt = Prompt.ask(">")
 
-        if prompt == "":
-            break
+        if prompt.strip() == "":
+            continue
 
         # Call the model with a system and user prompts.
         # Think if the system prompt as the function we are calling
@@ -57,7 +60,7 @@ def main(files, api_base, model, max_tokens, temperature):
             ],
             max_tokens=max_tokens,
             temperature=temperature,
-            num_ctx=8192,
+            num_ctx=num_ctx,
             api_base=api_base,
         )
 
