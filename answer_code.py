@@ -36,6 +36,8 @@ def main(files, api_base, model, max_tokens, temperature):
 
     system_prompt += "\n\n".join(code)
 
+    print(f"System prompt length {len(system_prompt)} approx tokens {len(system_prompt)//4}")
+
     # Iterate until all questions are answered
     done = False
     while not done:
