@@ -24,17 +24,19 @@ from gen_utils import parse_code_blobs
     "--output", default=None, help="Output file to write the generated code to."
 )
 @click.option(
-    "--api-base", default="http://localhost:11434", help="Base URL for the API."
+    "--api-base",
+    default="http://localhost:11434",
+    help="Base URL for the API.",
+    envvar="API_BASE",
 )
 @click.option(
-    "--model", default="ollama/deepseek-r1:14b", help="Model to use for generation."
+    "--model", default="ollama/qwen3:14b", help="Model to use for generation."
 )
 @click.option(
     "--max-tokens", default=3000, help="Maximum number of tokens to generate."
 )
 @click.option("--temperature", default=0.7, help="Temperature to use for generation.")
 def main(system_prompt, prompt, output, api_base, model, max_tokens, temperature):
-
 
     # Iterate until we get valid code.
     done = False
@@ -54,7 +56,6 @@ def main(system_prompt, prompt, output, api_base, model, max_tokens, temperature
             num_ctx=8192,
             api_base=api_base,
         )
-
 
         # Extract the content from the response messages.
         content = response["choices"][0]["message"]["content"]
