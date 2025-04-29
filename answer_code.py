@@ -4,14 +4,10 @@
 Answer questions about a code.
 """
 
-import ast
-
 import litellm
 import click
 from rich import print
 from rich.prompt import Prompt
-
-from gen_utils import parse_code_blobs
 
 
 @click.command()
@@ -30,7 +26,6 @@ from gen_utils import parse_code_blobs
 )
 @click.option("--temperature", default=0.7, help="Temperature to use for generation.")
 def main(files, api_base, model, max_tokens, temperature):
-
     system_prompt = """You are a helpful code assistant.
     Given the following code answer questions about it"""
 
@@ -44,7 +39,6 @@ def main(files, api_base, model, max_tokens, temperature):
     # Iterate until all questions are answered
     done = False
     while not done:
-
         prompt = Prompt.ask(">")
 
         if prompt == "":
