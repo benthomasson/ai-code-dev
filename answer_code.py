@@ -9,6 +9,8 @@ import click
 from rich import print
 from rich.prompt import Prompt
 
+from gen_utils import parse_code_blobs
+
 
 @click.command()
 @click.argument("files", nargs=-1)
@@ -28,9 +30,12 @@ from rich.prompt import Prompt
     "--num-ctx", default=8192, help="Size of the context"
 )
 @click.option("--temperature", default=0.7, help="Temperature to use for generation.")
-def main(files, api_base, model, max_tokens, temperature, num_ctx):
+@click.option("--output", default="output.txt", help="Log of the LLM output responses.")
+@click.option("--output_code", default="output.py", help="Log of the code in LLM responses.")
+def main(files, api_base, model, max_tokens, temperature, num_ctx, output, output_code):
     system_prompt = """You are a helpful code assistant.
-    Given the following code answer questions about it"""
+    Given the following code answer questions about it.
+    """
 
     code = []
     for file in files:
@@ -44,13 +49,13 @@ def main(files, api_base, model, max_tokens, temperature, num_ctx):
     # Iterate until all questions are answered
     done = False
     while not done:
-        prompt = Prompt.ask(">")
+        prompt = Prompt.ask(">", default="Ask a code question")
 
         if prompt.strip() == "":
             continue
 
         # Call the model with a system and user prompts.
-        # Think if the system prompt as the function we are calling
+        # Think of the system prompt as the function we are calling
         # and the prompt as the arguments to that functions.
         response = litellm.completion(
             model=model,
@@ -67,6 +72,12 @@ def main(files, api_base, model, max_tokens, temperature, num_ctx):
         # Extract the content from the response messages.
         content = response["choices"][0]["message"]["content"]
         print(content)
+
+        with open(output, 'a') as f:
+            f.write(content)
+
+        with open(output_code, 'a') as f:
+            f.write(parse_code_blobs(content))
 
 
 if __name__ == "__main__":
