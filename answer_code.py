@@ -76,8 +76,10 @@ def main(files, api_base, model, max_tokens, temperature, num_ctx, output, outpu
         with open(output, 'a') as f:
             f.write(content)
 
-        with open(output_code, 'a') as f:
-            f.write(parse_code_blobs(content))
+        code = parse_code_blobs(content)
+        if code:
+            with open(output_code, 'a') as f:
+                f.write(code)
 
 
 if __name__ == "__main__":
