@@ -18,3 +18,9 @@ def parse_code_blobs(code_blob: str) -> str:
 
     # Join all the code blobs together
     return "\n\n".join(match.strip() for match in matches)
+
+
+def rule(f):
+    f.write("\n")
+    f.write("-"*80)
+    f.write("\n")
